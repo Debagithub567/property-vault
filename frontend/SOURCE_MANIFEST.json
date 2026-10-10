@@ -1,0 +1,25 @@
+{
+  "source_commit": "2c6d401d40b0b96739d17ff4153f8c3b06dd3a73",
+  "source_files": {
+    "assets/downtown.jpg": "0381571253a94fcb83e774032e6540d216ba737eaac3a5b3a11f3658001d6fb2",
+    "assets/harbor.jpg": "18a3fe3542dc5bcc0e7117c961d9fc0b82ab4b36a75b4b68cb7dda78ed65de9b",
+    "assets/skyline.jpg": "8c428a4d1ea45e4e48b1851ce0322a2c6c883e680d2c22cdd1ef9691ac373a58",
+    "index.html": "e4f59e9eb94de9a16e2a02797c4a43d927955aadded31cc44e8526735e1abf2a",
+    "invest.css": "b07da0e1702e0a705b268fbb564abbe6d9dab9159b0c35f1f6c223584569100d",
+    "invest.js": "d77c9ec73b8e57c42fe04a7dd827d93fdbebdc1f9213d5ed00e1431feae91b82",
+    "investor.css": "290c0a8211779d7812998ab4f668920d9633bb87f150997ce445dadc99257adc",
+    "investor.js": "2f5eb37c9293972e8443afcc8f76f4481143ae20eabad20b2f2167de74eb5427",
+    "property-store.js": "6eddec145627d407090558716a2a195112e8319033f405c0c36f25b0fe155653",
+    "vendor/react-dom.min.js": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
+    "vendor/react.min.js": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
+    "wizard.css": "9d398eaf08a9316f83abaf592c2ffe695aaaa8479515fda84db4c8a7cba9f544",
+    "wizard.js": "a1aaceccfe5917dcdf0f7490665a92844a6e0f792cf2082f3f5494e86ddd29f4"
+  },
+  "adaptations": [
+    "HTML shell and CSS extracted without redesign.",
+    "Existing IIFE scripts wrapped as named initialization functions.",
+    "React 18.3.1 and lucide 0.468.0 moved from runtime vendor/CDN loading to npm imports.",
+    "Initial hash routing handles initialization after the load event.",
+    "Vite and TypeScript bootstrap/configuration added; approved JavaScript components retained."
+  ]
+}

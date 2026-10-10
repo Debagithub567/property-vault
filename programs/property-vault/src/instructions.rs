@@ -1,11 +1,19 @@
 pub mod claim_rent;
-pub mod list_and_tokenize_property;
+pub mod finalize_rent_period;
+pub mod initialize_config;
 pub mod invest;
+pub mod list_and_tokenize_property;
 pub mod pay_rent;
+pub mod register_holder;
+pub mod transfer_property_tokens;
 pub mod withdraw_raised_capital;
 
 pub use claim_rent::*;
-pub use list_and_tokenize_property::*;
+pub use finalize_rent_period::*;
+pub use initialize_config::*;
 pub use invest::*;
+pub use list_and_tokenize_property::*;
 pub use pay_rent::*;
+pub use register_holder::*;
+pub use transfer_property_tokens::*;
 pub use withdraw_raised_capital::*;

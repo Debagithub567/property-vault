@@ -6,7 +6,12 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-property_vault = "6uRuRs4UiJJpoFmrnd29AJUDWg3NyJBZBK6aLqLrysjn"
+property_vault = "DA1iVaPWd7epSAong3cGz8jX7rRJMT42zfrHWo3z5123"
+property_vault_transfer_hook = "3eKZN7MKpkU7gjaYFdR8zV6UCr8u7FeBTKBLe2yeM6J5"
+
+[programs.devnet]
+property_vault = "DA1iVaPWd7epSAong3cGz8jX7rRJMT42zfrHWo3z5123"
+property_vault_transfer_hook = "3eKZN7MKpkU7gjaYFdR8zV6UCr8u7FeBTKBLe2yeM6J5"
 
 [provider]
 cluster = "localnet"

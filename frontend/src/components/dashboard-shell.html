@@ -1,0 +1,41 @@
+<div id="pv">
+ <div class="shell">
+  <aside class="sidebar" aria-label="Primary navigation">
+   <div class="brand"><div class="logo"><i data-lucide="house" aria-hidden="true"></i></div><div><strong>PropertyVault</strong><small>Real estate, reimagined.</small></div></div>
+   <nav class="nav-group">
+    <button class="nav-item active cursor-interaction" data-nav="Dashboard"><i data-lucide="layout-dashboard" aria-hidden="true"></i>Dashboard</button>
+    <div class="nav-label">YOUR PORTFOLIO</div>
+    <button class="nav-item cursor-interaction" data-nav="Explore Properties"><i data-lucide="compass" aria-hidden="true"></i>Explore Properties</button>
+    <button class="nav-item cursor-interaction" data-nav="My Investments"><i data-lucide="briefcase-business" aria-hidden="true"></i>My Investments</button>
+    <button class="nav-item cursor-interaction" data-nav="My Properties"><i data-lucide="building-2" aria-hidden="true"></i>My Properties</button>
+    <div class="nav-label">MANAGE</div>
+    <button class="nav-item cursor-interaction" data-action="list"><i data-lucide="circle-plus" aria-hidden="true"></i>List a Property</button>
+    <button class="nav-item cursor-interaction" data-action="claim"><i data-lucide="wallet" aria-hidden="true"></i>Claim Rent</button>
+    <div class="nav-label">INSIGHTS & ACCOUNT</div>
+    <button class="nav-item cursor-interaction" data-action="analytics"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i>Portfolio Analytics</button>
+    <button class="nav-item cursor-interaction" data-action="chain"><i data-lucide="layers" aria-hidden="true"></i>On-chain Activity</button>
+    <button class="nav-item cursor-interaction" data-action="settings"><i data-lucide="settings-2" aria-hidden="true"></i>Settings</button>
+    <button class="nav-item cursor-interaction" data-action="help"><i data-lucide="circle-help" aria-hidden="true"></i>Help & Support</button>
+   </nav>
+   <div class="promo"><div class="eyebrow" style="color:#95baa5">A NEW WAY TO OWN</div><h3>Small shares.<br>Real possibilities.</h3><p>Build your property portfolio,<br>one investment at a time.</p><button class="cursor-interaction" data-action="learn">Discover how it works ↗</button></div>
+  </aside>
+  <div class="workspace">
+   <header class="topbar"><button class="icon-btn mobile-toggle cursor-interaction" aria-label="Toggle navigation" aria-expanded="false"><i data-lucide="menu" aria-hidden="true"></i></button><label class="search"><i data-lucide="search" aria-hidden="true"></i><input aria-label="Search properties" placeholder="Search properties, locations, or tokens…"><span class="key">⌘ K</span></label><div class="top-actions"><button class="icon-btn cursor-interaction" aria-label="Notifications" data-action="notifications"><i data-lucide="bell" aria-hidden="true"></i></button><span class="network" title="Application RPC is configured for Solana Devnet; wallet network is not verified"><span class="dot"></span>App: Devnet</span><span id="pv-wallet-slot"></span><span class="avatar" aria-label="Demo user">DR</span></div></header>
+   <main>
+    <section class="welcome"><div><div class="eyebrow">YOUR REAL ESTATE, IN ONE PLACE</div><h1>Welcome back<span style="color:#88a18f">.</span></h1><p>A little ownership. A world of possibility.</p></div><div class="actions"><button class="primary cursor-interaction" data-action="list"><i data-lucide="plus" aria-hidden="true"></i>List & Tokenize</button><button class="secondary cursor-interaction" data-nav="Explore Properties"><i data-lucide="compass" aria-hidden="true"></i>Explore Properties</button></div></section>
+    <div class="view-note" hidden></div>
+    <section class="stats" aria-label="Portfolio summary">
+     <div class="glass stat"><div class="stat-head"><span class="stat-icon"><i data-lucide="wallet" aria-hidden="true"></i></span><span class="stat-label">Total invested</span></div><div class="stat-value"><b style="font-weight:500" id="pv-total">500</b><span>USDC</span></div><div class="stat-foot"><span class="positive">↗ 12.3%</span> all time</div><svg class="spark" viewBox="0 0 70 30" aria-label="Investment trend rising"><path d="M2 25 Q10 24 16 18 T30 19 T44 13 T67 3" fill="none" stroke="currentColor" stroke-width="1.7"/></svg></div>
+     <div class="glass stat"><div class="stat-head"><span class="stat-icon"><i data-lucide="chart-pie" aria-hidden="true"></i></span><span class="stat-label">Property tokens</span></div><div class="stat-value"><b id="pv-tokens" style="font-weight:500">5</b><span>PVT</span></div><div class="stat-foot">5.0% of total supply</div></div>
+     <div class="glass stat"><div class="stat-head"><span class="stat-icon"><i data-lucide="building-2" aria-hidden="true"></i></span><span class="stat-label">Properties owned</span></div><div class="stat-value"><b id="pv-owned" style="font-weight:500">1</b><span>property</span></div><div class="stat-foot">100 PVT total supply</div></div>
+     <div class="glass stat"><div class="stat-head"><span class="stat-icon"><i data-lucide="coins" aria-hidden="true"></i></span><span class="stat-label">Claimable rent</span></div><div class="stat-value"><b id="pv-rent" style="font-weight:500">25</b><span>USDC</span></div><button class="text-link cursor-interaction" data-action="claim" style="margin-top:5px">Claim earnings <i data-lucide="arrow-up-right" aria-hidden="true"></i></button></div>
+    </section>
+    <div class="content-grid"><section class="glass panel featured"><div class="panel-heading"><div><h2>Featured properties</h2><p>Your next opportunity starts here.</p></div><button class="text-link cursor-interaction" data-nav="Explore Properties">View all <i data-lucide="arrow-up-right" aria-hidden="true"></i></button></div><div class="properties"></div></section><section class="glass panel activity"><div class="panel-heading"><h2>Recent activity</h2><button class="text-link cursor-interaction" data-action="chain" aria-label="View all activity"><i data-lucide="arrow-up-right" aria-hidden="true"></i></button></div><div class="activity-list"></div></section></div>
+    <div class="bottom-grid"><section class="glass panel investments"><div class="panel-heading"><h2>My investments</h2><button class="text-link cursor-interaction" data-nav="My Investments">View all ↗</button></div><div class="investment-row"><div class="property-name"><img class="thumb" data-photo="skyline" alt="Skyline Tower"><div>Skyline Tower<small>Manhattan, NY</small></div></div><div>5 PVT<small>500 USDC invested</small></div><div class="rent">12 USDC<small>Claimable rent</small></div></div><div class="investment-row"><div class="property-name"><img class="thumb" data-photo="downtown" alt="Downtown Mixed-Use"><div>Downtown Mixed-Use<small>Chicago, IL</small></div></div><div>2 PVT<small>210 USDC invested</small></div><div class="rent">13 USDC<small>Claimable rent</small></div></div></section><section class="glass panel owned"><div class="panel-heading"><h2>My properties</h2><button class="text-link cursor-interaction" data-nav="My Properties">View all ↗</button></div><div class="investment-row"><div class="property-name"><img class="thumb" data-photo="harbor" alt="Harbor View Residences"><div>Harbor View<small>Residences · Miami, FL</small></div></div><div>500 USDC<small>Total raised</small></div><div class="rent">100%<small>Funded</small></div></div><button class="withdraw cursor-interaction" data-action="withdraw"><span>Withdraw raised capital<small><span id="pv-capital">300</span> USDC available in your investment pool</small></span><i data-lucide="arrow-right" aria-hidden="true"></i></button></section></div>
+    <footer class="footer"><span><span class="dot"></span>App: Devnet · Demo data</span><span>Built for a more open kind of ownership.</span></footer>
+   </main>
+  </div>
+ </div>
+ <div class="toast" role="status" aria-live="polite"></div>
+ <div class="overlay" hidden><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="pv-dialog-title"><button class="icon-btn dialog-close cursor-interaction" aria-label="Close dialog"><i data-lucide="x" aria-hidden="true"></i></button><div class="dialog-content"></div></section></div>
+</div>
