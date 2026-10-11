@@ -1,0 +1,2474 @@
+{
+  "address": "DA1iVaPWd7epSAong3cGz8jX7rRJMT42zfrHWo3z5123",
+  "metadata": {
+    "name": "property_vault",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "claim_owner_rent",
+      "discriminator": [
+        115,
+        10,
+        144,
+        92,
+        104,
+        65,
+        226,
+        92
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true,
+          "relations": [
+            "property"
+          ]
+        },
+        {
+          "name": "property",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  112,
+                  101,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property.owner",
+                "account": "Property"
+              },
+              {
+                "kind": "account",
+                "path": "property.property_id",
+                "account": "Property"
+              }
+            ]
+          },
+          "relations": [
+            "rent_pool"
+          ]
+        },
+        {
+          "name": "rent_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mock_usdc_mint"
+        },
+        {
+          "name": "rent_vault",
+          "writable": true
+        },
+        {
+          "name": "owner_usdc",
+          "writable": true
+        },
+        {
+          "name": "legacy_token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "claim_rent",
+      "discriminator": [
+        57,
+        233,
+        51,
+        137,
+        102,
+        101,
+        26,
+        101
+      ],
+      "accounts": [
+        {
+          "name": "holder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "property",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  112,
+                  101,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property.owner",
+                "account": "Property"
+              },
+              {
+                "kind": "account",
+                "path": "property.property_id",
+                "account": "Property"
+              }
+            ]
+          },
+          "relations": [
+            "rent_pool",
+            "rent_period"
+          ]
+        },
+        {
+          "name": "rent_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_period",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  101,
+                  114,
+                  105,
+                  111,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              },
+              {
+                "kind": "arg",
+                "path": "period_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_claim",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  99,
+                  108,
+                  97,
+                  105,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              },
+              {
+                "kind": "arg",
+                "path": "period_id"
+              },
+              {
+                "kind": "account",
+                "path": "holder"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mock_usdc_mint"
+        },
+        {
+          "name": "rent_vault",
+          "writable": true
+        },
+        {
+          "name": "holder_usdc",
+          "writable": true
+        },
+        {
+          "name": "legacy_token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "period_id",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "finalize_rent_period",
+      "discriminator": [
+        34,
+        171,
+        4,
+        222,
+        89,
+        118,
+        78,
+        4
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "property",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  112,
+                  101,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property.owner",
+                "account": "Property"
+              },
+              {
+                "kind": "account",
+                "path": "property.property_id",
+                "account": "Property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "inventory_vault"
+        },
+        {
+          "name": "registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  104,
+                  111,
+                  108,
+                  100,
+                  101,
+                  114,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mock_usdc_mint"
+        },
+        {
+          "name": "rent_vault"
+        },
+        {
+          "name": "rent_period",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  101,
+                  114,
+                  105,
+                  111,
+                  100
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              },
+              {
+                "kind": "account",
+                "path": "rent_pool.period_id",
+                "account": "RentPool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_config",
+      "discriminator": [
+        208,
+        127,
+        21,
+        1,
+        194,
+        190,
+        196,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true,
+          "address": "HEDAri8JV8DXDU2eN7EnJ9ELkXJ5GLBGiFemnQwx8vQA"
+        },
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "mock_usdc_mint_account"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "mock_usdc_mint",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "invest",
+      "discriminator": [
+        13,
+        245,
+        180,
+        103,
+        254,
+        182,
+        121,
+        4
+      ],
+      "accounts": [
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "property",
+          "relations": [
+            "investment_pool"
+          ]
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "inventory_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  110,
+                  116,
+                  111,
+                  114,
+                  121,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "inventory_vault",
+          "writable": true
+        },
+        {
+          "name": "freeze_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  101,
+                  101,
+                  122,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor_property_token",
+          "writable": true
+        },
+        {
+          "name": "registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  104,
+                  111,
+                  108,
+                  100,
+                  101,
+                  114,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_pool",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investment_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  115,
+                  116,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "position",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  115,
+                  105,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mock_usdc_mint"
+        },
+        {
+          "name": "investor_usdc",
+          "writable": true
+        },
+        {
+          "name": "investment_vault",
+          "writable": true
+        },
+        {
+          "name": "extra_account_meta_list",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                39,
+                70,
+                216,
+                238,
+                59,
+                111,
+                127,
+                81,
+                126,
+                197,
+                113,
+                62,
+                226,
+                56,
+                222,
+                239,
+                147,
+                238,
+                233,
+                130,
+                0,
+                106,
+                227,
+                16,
+                42,
+                101,
+                145,
+                103,
+                190,
+                160,
+                232,
+                194
+              ]
+            }
+          }
+        },
+        {
+          "name": "hook_program",
+          "address": "3eKZN7MKpkU7gjaYFdR8zV6UCr8u7FeBTKBLe2yeM6J5"
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "legacy_token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "accepted_terms_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "accepted_investor_allocation_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "list_and_tokenize_property",
+      "discriminator": [
+        213,
+        102,
+        81,
+        91,
+        78,
+        7,
+        22,
+        240
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "property",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  112,
+                  101,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "arg",
+                "path": "property_id"
+              }
+            ]
+          }
+        },
+        {
+          "name": "property_mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  112,
+                  101,
+                  114,
+                  116,
+                  121,
+                  95,
+                  109,
+                  105,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "inventory_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  110,
+                  116,
+                  111,
+                  114,
+                  121,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "freeze_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  101,
+                  101,
+                  122,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "inventory_vault",
+          "writable": true
+        },
+        {
+          "name": "investment_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  115,
+                  116,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investment_vault",
+          "writable": true
+        },
+        {
+          "name": "rent_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_vault",
+          "writable": true
+        },
+        {
+          "name": "holder_registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  104,
+                  111,
+                  108,
+                  100,
+                  101,
+                  114,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mock_usdc_mint",
+          "relations": [
+            "config"
+          ]
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "legacy_token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "property_id",
+          "type": "u64"
+        },
+        {
+          "name": "tenant",
+          "type": "pubkey"
+        },
+        {
+          "name": "token_price",
+          "type": "u64"
+        },
+        {
+          "name": "max_supply",
+          "type": "u64"
+        },
+        {
+          "name": "terms_hash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "duration_seconds",
+          "type": "u64"
+        },
+        {
+          "name": "investor_allocation_bps",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "pay_rent",
+      "discriminator": [
+        69,
+        155,
+        112,
+        183,
+        178,
+        234,
+        94,
+        100
+      ],
+      "accounts": [
+        {
+          "name": "tenant",
+          "signer": true,
+          "relations": [
+            "property"
+          ]
+        },
+        {
+          "name": "property",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  112,
+                  101,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property.owner",
+                "account": "Property"
+              },
+              {
+                "kind": "account",
+                "path": "property.property_id",
+                "account": "Property"
+              }
+            ]
+          },
+          "relations": [
+            "rent_pool"
+          ]
+        },
+        {
+          "name": "rent_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_vault",
+          "writable": true
+        },
+        {
+          "name": "tenant_usdc",
+          "writable": true
+        },
+        {
+          "name": "mock_usdc_mint"
+        },
+        {
+          "name": "legacy_token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "register_holder",
+      "discriminator": [
+        113,
+        111,
+        117,
+        246,
+        175,
+        59,
+        98,
+        161
+      ],
+      "accounts": [
+        {
+          "name": "holder",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "property"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  104,
+                  111,
+                  108,
+                  100,
+                  101,
+                  114,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_pool",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "holder_token",
+          "writable": true
+        },
+        {
+          "name": "freeze_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  101,
+                  101,
+                  122,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_2022_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "previous_holder_token",
+          "optional": true
+        }
+      ],
+      "args": [
+        {
+          "name": "replace_index",
+          "type": {
+            "option": "u8"
+          }
+        }
+      ]
+    },
+    {
+      "name": "transfer_property_tokens",
+      "discriminator": [
+        134,
+        212,
+        76,
+        91,
+        172,
+        105,
+        83,
+        11
+      ],
+      "accounts": [
+        {
+          "name": "source_holder",
+          "signer": true
+        },
+        {
+          "name": "property"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "source_token",
+          "writable": true
+        },
+        {
+          "name": "destination_token",
+          "writable": true
+        },
+        {
+          "name": "freeze_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  114,
+                  101,
+                  101,
+                  122,
+                  101,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  104,
+                  111,
+                  108,
+                  100,
+                  101,
+                  114,
+                  95,
+                  114,
+                  101,
+                  103,
+                  105,
+                  115,
+                  116,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "rent_pool",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "extra_account_meta_list",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                39,
+                70,
+                216,
+                238,
+                59,
+                111,
+                127,
+                81,
+                126,
+                197,
+                113,
+                62,
+                226,
+                56,
+                222,
+                239,
+                147,
+                238,
+                233,
+                130,
+                0,
+                106,
+                227,
+                16,
+                42,
+                101,
+                145,
+                103,
+                190,
+                160,
+                232,
+                194
+              ]
+            }
+          }
+        },
+        {
+          "name": "hook_program",
+          "address": "3eKZN7MKpkU7gjaYFdR8zV6UCr8u7FeBTKBLe2yeM6J5"
+        },
+        {
+          "name": "property_token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "withdraw_raised_capital",
+      "discriminator": [
+        217,
+        188,
+        236,
+        71,
+        242,
+        169,
+        4,
+        111
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true,
+          "relations": [
+            "property"
+          ]
+        },
+        {
+          "name": "property",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  112,
+                  101,
+                  114,
+                  116,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property.owner",
+                "account": "Property"
+              },
+              {
+                "kind": "account",
+                "path": "property.property_id",
+                "account": "Property"
+              }
+            ]
+          },
+          "relations": [
+            "investment_pool"
+          ]
+        },
+        {
+          "name": "investment_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  101,
+                  115,
+                  116,
+                  109,
+                  101,
+                  110,
+                  116,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investment_vault",
+          "writable": true
+        },
+        {
+          "name": "owner_usdc",
+          "writable": true
+        },
+        {
+          "name": "mock_usdc_mint"
+        },
+        {
+          "name": "legacy_token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Config",
+      "discriminator": [
+        155,
+        12,
+        170,
+        224,
+        30,
+        250,
+        204,
+        130
+      ]
+    },
+    {
+      "name": "HolderRegistry",
+      "discriminator": [
+        224,
+        41,
+        203,
+        13,
+        207,
+        114,
+        165,
+        255
+      ]
+    },
+    {
+      "name": "InvestmentPool",
+      "discriminator": [
+        249,
+        249,
+        87,
+        148,
+        252,
+        192,
+        148,
+        203
+      ]
+    },
+    {
+      "name": "InvestorPosition",
+      "discriminator": [
+        145,
+        143,
+        236,
+        150,
+        229,
+        40,
+        195,
+        88
+      ]
+    },
+    {
+      "name": "Property",
+      "discriminator": [
+        195,
+        247,
+        69,
+        181,
+        195,
+        47,
+        152,
+        19
+      ]
+    },
+    {
+      "name": "RentClaim",
+      "discriminator": [
+        13,
+        5,
+        183,
+        82,
+        60,
+        122,
+        72,
+        11
+      ]
+    },
+    {
+      "name": "RentPeriod",
+      "discriminator": [
+        227,
+        180,
+        62,
+        89,
+        88,
+        69,
+        129,
+        163
+      ]
+    },
+    {
+      "name": "RentPool",
+      "discriminator": [
+        147,
+        139,
+        254,
+        34,
+        153,
+        44,
+        233,
+        123
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "InvestmentMade",
+      "discriminator": [
+        24,
+        137,
+        204,
+        98,
+        233,
+        3,
+        108,
+        190
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidInvestmentAmount",
+      "msg": "Investment amount must be positive"
+    },
+    {
+      "code": 6002,
+      "name": "StaleTerms",
+      "msg": "Reserved legacy terms error"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidTokenPrice",
+      "msg": "Property token price must be positive"
+    },
+    {
+      "code": 6004,
+      "name": "InvestmentAmountNotDivisible",
+      "msg": "Investment amount must purchase a whole number of property tokens"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidTokenAllocation",
+      "msg": "Property token allocation must be positive"
+    },
+    {
+      "code": 6006,
+      "name": "InsufficientPropertyTokenSupply",
+      "msg": "Insufficient property token inventory"
+    },
+    {
+      "code": 6007,
+      "name": "ArithmeticOverflow",
+      "msg": "Arithmetic overflow"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidAccountingState",
+      "msg": "Investment pool accounting is inconsistent"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidWithdrawalAmount",
+      "msg": "Withdrawal amount must be positive"
+    },
+    {
+      "code": 6010,
+      "name": "WithdrawalExceedsAvailableCapital",
+      "msg": "Withdrawal exceeds available raised capital"
+    },
+    {
+      "code": 6011,
+      "name": "InsufficientInvestmentVaultBalance",
+      "msg": "Investment vault balance is insufficient for withdrawal"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidRentPaymentAmount",
+      "msg": "Rent payment amount must be positive"
+    },
+    {
+      "code": 6013,
+      "name": "InsufficientTenantUsdcBalance",
+      "msg": "Tenant mock-USDC balance is insufficient"
+    },
+    {
+      "code": 6014,
+      "name": "NotImplemented",
+      "msg": "This instruction is not implemented yet"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidMaxSupply",
+      "msg": "Invalid property supply"
+    },
+    {
+      "code": 6016,
+      "name": "InvalidInvestorAllocation",
+      "msg": "Investor rental allocation must be between 1 and 9,999 basis points"
+    },
+    {
+      "code": 6017,
+      "name": "StaleInvestorAllocation",
+      "msg": "Accepted investor rental allocation does not match the property"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidTenant",
+      "msg": "Invalid tenant"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidRentDuration",
+      "msg": "Invalid rent collection duration"
+    },
+    {
+      "code": 6020,
+      "name": "RentCollectionClosed",
+      "msg": "Rent collection has ended for this period"
+    },
+    {
+      "code": 6021,
+      "name": "RentPeriodNotReady",
+      "msg": "Rent collection is still active"
+    },
+    {
+      "code": 6022,
+      "name": "HolderRegistryFull",
+      "msg": "Holder registry is full"
+    },
+    {
+      "code": 6023,
+      "name": "HolderNotRegistered",
+      "msg": "Holder is not registered"
+    },
+    {
+      "code": 6024,
+      "name": "HolderAlreadyRegistered",
+      "msg": "Holder is already registered"
+    },
+    {
+      "code": 6025,
+      "name": "InvalidHolderTokenAccount",
+      "msg": "Token account does not match the holder's canonical associated token account"
+    },
+    {
+      "code": 6026,
+      "name": "TokenAccountNotFrozen",
+      "msg": "Token account is not frozen at rest"
+    },
+    {
+      "code": 6027,
+      "name": "InvalidMockUsdcMint",
+      "msg": "Mock USDC mint must use the legacy token program and six decimals"
+    },
+    {
+      "code": 6028,
+      "name": "InvalidPropertyMint",
+      "msg": "Invalid property token mint"
+    },
+    {
+      "code": 6029,
+      "name": "InvalidProtocolAccount",
+      "msg": "Invalid protocol account or PDA"
+    },
+    {
+      "code": 6030,
+      "name": "InvalidRentAccountingState",
+      "msg": "Rent pool accounting is inconsistent"
+    },
+    {
+      "code": 6031,
+      "name": "InvalidHolderSnapshot",
+      "msg": "Registered holder token accounts do not form a complete valid snapshot"
+    },
+    {
+      "code": 6032,
+      "name": "InsufficientRentVaultBalance",
+      "msg": "Rent vault cannot cover reserved and current-period rent"
+    },
+    {
+      "code": 6033,
+      "name": "RentAlreadyClaimed",
+      "msg": "Rent entitlement has already been claimed"
+    },
+    {
+      "code": 6034,
+      "name": "NoRentEntitlement",
+      "msg": "No rent entitlement exists for this holder"
+    },
+    {
+      "code": 6035,
+      "name": "NoOwnerRentEntitlement",
+      "msg": "No finalized owner rent is available to claim"
+    },
+    {
+      "code": 6036,
+      "name": "InvalidTransferAmount",
+      "msg": "Transfer amount must be positive"
+    },
+    {
+      "code": 6037,
+      "name": "InsufficientPropertyTokenBalance",
+      "msg": "Property token balance is insufficient"
+    },
+    {
+      "code": 6038,
+      "name": "InvalidHookMetadata",
+      "msg": "Transfer Hook metadata is missing or invalid"
+    },
+    {
+      "code": 6039,
+      "name": "InvalidRegistryIndex",
+      "msg": "Holder registry replacement index is invalid"
+    },
+    {
+      "code": 6040,
+      "name": "HolderStillOwnsTokens",
+      "msg": "The replaced holder still owns property tokens"
+    }
+  ],
+  "types": [
+    {
+      "name": "Config",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "mock_usdc_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "HolderRegistry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "holders",
+            "type": {
+              "array": [
+                "pubkey",
+                10
+              ]
+            }
+          },
+          {
+            "name": "count",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestmentMade",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "usdc_amount",
+            "type": "u64"
+          },
+          {
+            "name": "token_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestmentPool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_raised",
+            "type": "u64"
+          },
+          {
+            "name": "total_withdrawn",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestorPosition",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "invested_amount",
+            "type": "u64"
+          },
+          {
+            "name": "token_amount",
+            "type": "u64"
+          },
+          {
+            "name": "accepted_terms_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Property",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "tenant",
+            "type": "pubkey"
+          },
+          {
+            "name": "property_id",
+            "type": "u64"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "inventory_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "mock_usdc_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "token_price",
+            "type": "u64"
+          },
+          {
+            "name": "max_supply",
+            "type": "u64"
+          },
+          {
+            "name": "investor_allocation_bps",
+            "type": "u16"
+          },
+          {
+            "name": "terms_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "inventory_authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "freeze_authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RentClaim",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "period_id",
+            "type": "u64"
+          },
+          {
+            "name": "holder",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RentPeriod",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "period_id",
+            "type": "u64"
+          },
+          {
+            "name": "start_ts",
+            "type": "i64"
+          },
+          {
+            "name": "cutoff_ts",
+            "type": "i64"
+          },
+          {
+            "name": "distributable_rent",
+            "type": "u64"
+          },
+          {
+            "name": "owner_entitlement",
+            "type": "u64"
+          },
+          {
+            "name": "eligible_supply",
+            "type": "u64"
+          },
+          {
+            "name": "total_entitlement",
+            "type": "u64"
+          },
+          {
+            "name": "claimed_amount",
+            "type": "u64"
+          },
+          {
+            "name": "holder_count",
+            "type": "u8"
+          },
+          {
+            "name": "holders",
+            "type": {
+              "array": [
+                "pubkey",
+                10
+              ]
+            }
+          },
+          {
+            "name": "balances",
+            "type": {
+              "array": [
+                "u64",
+                10
+              ]
+            }
+          },
+          {
+            "name": "entitlements",
+            "type": {
+              "array": [
+                "u64",
+                10
+              ]
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RentPool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "period_id",
+            "type": "u64"
+          },
+          {
+            "name": "period_start_ts",
+            "type": "i64"
+          },
+          {
+            "name": "cutoff_ts",
+            "type": "i64"
+          },
+          {
+            "name": "duration_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "current_deposits",
+            "type": "u64"
+          },
+          {
+            "name": "reserved_unclaimed",
+            "type": "u64"
+          },
+          {
+            "name": "owner_entitlement_total",
+            "type": "u64"
+          },
+          {
+            "name": "owner_claimed_total",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "constants": [
+    {
+      "name": "CONFIG_SEED",
+      "type": "bytes",
+      "value": "[99, 111, 110, 102, 105, 103]"
+    },
+    {
+      "name": "EXTRA_ACCOUNT_METAS_SEED",
+      "type": "bytes",
+      "value": "[101, 120, 116, 114, 97, 45, 97, 99, 99, 111, 117, 110, 116, 45, 109, 101, 116, 97, 115]"
+    },
+    {
+      "name": "FREEZE_AUTHORITY_SEED",
+      "type": "bytes",
+      "value": "[102, 114, 101, 101, 122, 101, 95, 97, 117, 116, 104, 111, 114, 105, 116, 121]"
+    },
+    {
+      "name": "HOLDER_REGISTRY_SEED",
+      "type": "bytes",
+      "value": "[104, 111, 108, 100, 101, 114, 95, 114, 101, 103, 105, 115, 116, 114, 121]"
+    },
+    {
+      "name": "INVENTORY_AUTHORITY_SEED",
+      "type": "bytes",
+      "value": "[105, 110, 118, 101, 110, 116, 111, 114, 121, 95, 97, 117, 116, 104, 111, 114, 105, 116, 121]"
+    },
+    {
+      "name": "INVESTMENT_POOL_SEED",
+      "type": "bytes",
+      "value": "[105, 110, 118, 101, 115, 116, 109, 101, 110, 116, 95, 112, 111, 111, 108]"
+    },
+    {
+      "name": "POSITION_SEED",
+      "type": "bytes",
+      "value": "[112, 111, 115, 105, 116, 105, 111, 110]"
+    },
+    {
+      "name": "PROPERTY_MINT_SEED",
+      "type": "bytes",
+      "value": "[112, 114, 111, 112, 101, 114, 116, 121, 95, 109, 105, 110, 116]"
+    },
+    {
+      "name": "PROPERTY_SEED",
+      "type": "bytes",
+      "value": "[112, 114, 111, 112, 101, 114, 116, 121]"
+    },
+    {
+      "name": "RENT_CLAIM_SEED",
+      "type": "bytes",
+      "value": "[114, 101, 110, 116, 95, 99, 108, 97, 105, 109]"
+    },
+    {
+      "name": "RENT_PERIOD_SEED",
+      "type": "bytes",
+      "value": "[114, 101, 110, 116, 95, 112, 101, 114, 105, 111, 100]"
+    },
+    {
+      "name": "RENT_POOL_SEED",
+      "type": "bytes",
+      "value": "[114, 101, 110, 116, 95, 112, 111, 111, 108]"
+    }
+  ]
+}

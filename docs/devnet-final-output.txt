@@ -1,0 +1,35 @@
+
+
+  PropertyVault confirmed Devnet lifecycle
+    ✔ verifies deployed ABI, existing account layouts, and funding authority (4033ms)
+CONFIRMED test wallet funding: 2ZT52syoaNTMSgDcBTikFbd4Vz2svHqp4eoycXQ2QkmncYt447n5Xp6itm6S73ThjMJsVeq8Twsx44EQxhDiKLTM https://explorer.solana.com/tx/2ZT52syoaNTMSgDcBTikFbd4Vz2svHqp4eoycXQ2QkmncYt447n5Xp6itm6S73ThjMJsVeq8Twsx44EQxhDiKLTM?cluster=devnet
+    ✔ funds an isolated investor and tenant with controlled mock USDC (4677ms)
+CONFIRMED property listing and hook initialization: 42UY2mbNg9LpvwiBJCynkeUJytn16WUavdFA137szfQfV13gdkoHNqpUPp8LqpZXKAswBfPLY3QaqPMVVhXW9e5Y https://explorer.solana.com/tx/42UY2mbNg9LpvwiBJCynkeUJytn16WUavdFA137szfQfV13gdkoHNqpUPp8LqpZXKAswBfPLY3QaqPMVVhXW9e5Y?cluster=devnet
+TEST PROPERTY DQvVsBvFBkUYYFJMeGwYHCGCWi3az7qTPf1SiwKrzRUy ID 4731460637564843075
+    ✔ creates and verifies an isolated property, Token-2022 mint, pools, vaults, and registry (5713ms)
+CONFIRMED investor registration: 2jyT5js2SoAUgta51tKt7auFML5jGZEnWx8QpnmrqoYBfSBNqMQtq8zBQT2bSXcKoBcHS69SZi8ds4ZwW85c7ADm https://explorer.solana.com/tx/2jyT5js2SoAUgta51tKt7auFML5jGZEnWx8QpnmrqoYBfSBNqMQtq8zBQT2bSXcKoBcHS69SZi8ds4ZwW85c7ADm?cluster=devnet
+    ✔ registers the investor and initializes a frozen Token-2022 account (3480ms)
+CONFIRMED REJECTION wrong accepted terms hash: 2ahT91tQVeWMtPpnsf53ZbLFivcDCiRDzDJ9RS5zub7BagGzoPCQC96U93ibaB4UiZCDLnYQqyhbr4Ben8KxtkTo https://explorer.solana.com/tx/2ahT91tQVeWMtPpnsf53ZbLFivcDCiRDzDJ9RS5zub7BagGzoPCQC96U93ibaB4UiZCDLnYQqyhbr4Ben8KxtkTo?cluster=devnet
+    ✔ rejects an incorrect accepted terms hash without changing state (2286ms)
+CONFIRMED REJECTION wrong investor allocation: 3gMfjqRiD98eNrrFFummJj3pZzjTG2q6bkSLcKkZpGiFxP4q13UezaacivPeb3T67mrbx1SSmzCB2ysqzhVLdgi https://explorer.solana.com/tx/3gMfjqRiD98eNrrFFummJj3pZzjTG2q6bkSLcKkZpGiFxP4q13UezaacivPeb3T67mrbx1SSmzCB2ysqzhVLdgi?cluster=devnet
+    ✔ rejects an incorrect investor allocation without changing state (3393ms)
+CONFIRMED one-token investment: 3fmErbm8KCBXWDa9ctVuoc3iJwPjGufNSybJPdfHkGuUiWk3JmN7GGTNiS86XfTJH8q2S6JKx1b9a238HNWBEH8q https://explorer.solana.com/tx/3fmErbm8KCBXWDa9ctVuoc3iJwPjGufNSybJPdfHkGuUiWk3JmN7GGTNiS86XfTJH8q2S6JKx1b9a238HNWBEH8q?cluster=devnet
+    ✔ invests one token and verifies payment, inventory, and InvestorPosition (4607ms)
+CONFIRMED REJECTION unauthorized capital withdrawal: 24CqcpzB1vSpkTMqoom1DaRRc66eTAug3vLeUZyrpG1BuisB9KhGJkjL2SWovPPjgdkWyssBvhtHfzQuQQZnuQRg https://explorer.solana.com/tx/24CqcpzB1vSpkTMqoom1DaRRc66eTAug3vLeUZyrpG1BuisB9KhGJkjL2SWovPPjgdkWyssBvhtHfzQuQQZnuQRg?cluster=devnet
+    ✔ rejects unauthorized capital withdrawal without changing accounting (3126ms)
+CONFIRMED owner capital withdrawal: 4XRRxpyvrXewWGBy8NWXNJtVipZUDE7ikhtvuN6jm375e2f1ArZwNGgoqUYUxCtmLCHfnV3VDNFATaTHqRDxoFTD https://explorer.solana.com/tx/4XRRxpyvrXewWGBy8NWXNJtVipZUDE7ikhtvuN6jm375e2f1ArZwNGgoqUYUxCtmLCHfnV3VDNFATaTHqRDxoFTD?cluster=devnet
+    ✔ withdraws raised capital and verifies both balances and accounting (3671ms)
+CONFIRMED tenant rent payment: 4cpJvHXXi4Mt5Rv1ZQemZdjD2uReH7cKSMZwnz5vKf1QdjEMfmgghQNp33vbwXFs6HCexzRpr5yVaUfC5xLaCwTX https://explorer.solana.com/tx/4cpJvHXXi4Mt5Rv1ZQemZdjD2uReH7cKSMZwnz5vKf1QdjEMfmgghQNp33vbwXFs6HCexzRpr5yVaUfC5xLaCwTX?cluster=devnet
+    ✔ pays tenant rent and verifies rent-vault accounting (4984ms)
+CONFIRMED rent period finalization: 4xLjt5QgvKbGdq9jRKtyxfGsh3q1f9dSNQxMAMKHhbdY7qLYkfoSyXc7bZoCv2u2u8z9BsLreFj3zT5oWWExyuxk https://explorer.solana.com/tx/4xLjt5QgvKbGdq9jRKtyxfGsh3q1f9dSNQxMAMKHhbdY7qLYkfoSyXc7bZoCv2u2u8z9BsLreFj3zT5oWWExyuxk?cluster=devnet
+    ✔ finalizes after cutoff and verifies the holder snapshot and rent split (160701ms)
+CONFIRMED investor rent claim: 51oMLrrdsT1FuNPPQgSLLNSuUbEFQEwBWDxk8E4EjNJNp7PHscA2tn1rfobu7ZDcDDt6kD3a8L5aYicfGuMd9x4U https://explorer.solana.com/tx/51oMLrrdsT1FuNPPQgSLLNSuUbEFQEwBWDxk8E4EjNJNp7PHscA2tn1rfobu7ZDcDDt6kD3a8L5aYicfGuMd9x4U?cluster=devnet
+    ✔ claims investor rent and verifies claim PDA, balances, and reserved accounting (5985ms)
+CONFIRMED REJECTION duplicate investor rent claim: 2v56wPupKfCFSSo6Z1n21ZUvJkkwz1y75KcwL2Wz8tR9EEU24saMTmd7mFdiPiwVR7vjUSmhvJK7gptqsssjvpN8 https://explorer.solana.com/tx/2v56wPupKfCFSSo6Z1n21ZUvJkkwz1y75KcwL2Wz8tR9EEU24saMTmd7mFdiPiwVR7vjUSmhvJK7gptqsssjvpN8?cluster=devnet
+    ✔ rejects a duplicate investor claim without moving rent (2541ms)
+CONFIRMED owner rent claim: 3ibEH8pGZzRzLD7bnUyv4oJASqdZoSRv9KETAje5ypfdvBznKug8iVBdD5SeyNXfN76vjJKPK8SvgVQEYwx7kRPn https://explorer.solana.com/tx/3ibEH8pGZzRzLD7bnUyv4oJASqdZoSRv9KETAje5ypfdvBznKug8iVBdD5SeyNXfN76vjJKPK8SvgVQEYwx7kRPn?cluster=devnet
+    ✔ claims owner rent and verifies balances and final owner accounting (4181ms)
+
+
+  14 passing (4m)
+

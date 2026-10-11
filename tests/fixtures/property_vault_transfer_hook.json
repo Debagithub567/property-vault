@@ -1,0 +1,397 @@
+{
+  "address": "3eKZN7MKpkU7gjaYFdR8zV6UCr8u7FeBTKBLe2yeM6J5",
+  "metadata": {
+    "name": "property_vault_transfer_hook",
+    "version": "0.1.0",
+    "spec": "0.1.0"
+  },
+  "instructions": [
+    {
+      "name": "execute",
+      "discriminator": [
+        105,
+        37,
+        101,
+        197,
+        75,
+        251,
+        102,
+        26
+      ],
+      "accounts": [
+        {
+          "name": "source_token"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "destination_token"
+        },
+        {
+          "name": "authority",
+          "docs": [
+            "source token account owner. Signer privilege is unavailable in Execute."
+          ]
+        },
+        {
+          "name": "extra_account_meta_list",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "property"
+        },
+        {
+          "name": "rent_pool"
+        },
+        {
+          "name": "holder_registry"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize_extra_account_meta_list",
+      "discriminator": [
+        92,
+        197,
+        174,
+        197,
+        41,
+        124,
+        19,
+        3
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "extra_account_meta_list",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "property"
+        },
+        {
+          "name": "rent_pool"
+        },
+        {
+          "name": "holder_registry"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidExtraAccountMetaList",
+      "msg": "Invalid or already initialized ExtraAccountMetaList"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidPropertyPda",
+      "msg": "Invalid canonical Property PDA or bump"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidPropertyMint",
+      "msg": "Invalid property mint PDA or account"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidTransferHookProgram",
+      "msg": "The mint does not use this Transfer Hook program"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidRentPool",
+      "msg": "Invalid RentPool PDA, period, or property relationship"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidHolderRegistry",
+      "msg": "Invalid HolderRegistry PDA or property relationship"
+    },
+    {
+      "code": 6006,
+      "name": "MalformedHolderRegistry",
+      "msg": "The holder registry exceeds its limit or contains duplicate wallets"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidTokenAccount",
+      "msg": "The source or destination is not a canonical Token-2022 associated token account"
+    },
+    {
+      "code": 6008,
+      "name": "InvalidTransferAuthority",
+      "msg": "Transfer authority does not own the source token account"
+    },
+    {
+      "code": 6009,
+      "name": "NotTransferring",
+      "msg": "The token account is not in a real Token-2022 transfer"
+    },
+    {
+      "code": 6010,
+      "name": "UnregisteredSource",
+      "msg": "The source wallet is not registered"
+    },
+    {
+      "code": 6011,
+      "name": "UnregisteredDestination",
+      "msg": "The destination wallet is not registered"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidInventoryTransfer",
+      "msg": "Inventory may only be the source of a property token transfer"
+    },
+    {
+      "code": 6013,
+      "name": "CollectionClosed",
+      "msg": "Property-token transfers are closed at this period's cutoff"
+    },
+    {
+      "code": 6014,
+      "name": "CollectionNotStarted",
+      "msg": "The rental collection period has not started"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidAmount",
+      "msg": "Transfer amount must be positive"
+    }
+  ],
+  "types": [
+    {
+      "name": "HolderRegistry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "holders",
+            "type": {
+              "array": [
+                "pubkey",
+                10
+              ]
+            }
+          },
+          {
+            "name": "count",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Property",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "tenant",
+            "type": "pubkey"
+          },
+          {
+            "name": "property_id",
+            "type": "u64"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "inventory_vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "mock_usdc_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "token_price",
+            "type": "u64"
+          },
+          {
+            "name": "max_supply",
+            "type": "u64"
+          },
+          {
+            "name": "investor_allocation_bps",
+            "type": "u16"
+          },
+          {
+            "name": "terms_hash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "inventory_authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "freeze_authority_bump",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RentPool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "property",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "name": "period_id",
+            "type": "u64"
+          },
+          {
+            "name": "period_start_ts",
+            "type": "i64"
+          },
+          {
+            "name": "cutoff_ts",
+            "type": "i64"
+          },
+          {
+            "name": "duration_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "current_deposits",
+            "type": "u64"
+          },
+          {
+            "name": "reserved_unclaimed",
+            "type": "u64"
+          },
+          {
+            "name": "owner_entitlement_total",
+            "type": "u64"
+          },
+          {
+            "name": "owner_claimed_total",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}
