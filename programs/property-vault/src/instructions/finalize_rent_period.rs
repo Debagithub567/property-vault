@@ -132,42 +132,42 @@ pub fn handle_finalize_rent_period(ctx: Context<FinalizeRentPeriod>) -> Result<(
         accounts.property.max_supply,
         Error::InvalidHolderSnapshot
     );
-    let distributable = rent_logic::distributable_rent(
-        accounts.rent_pool.current_deposits,
-        accounts.rent_pool.carry,
+    let distributable = accounts.rent_pool.current_deposits;
+    let (investor_amount, owner_amount) = rent_logic::split_rent(
+        distributable,
+        accounts.property.investor_allocation_bps,
+        eligible_supply,
     )
     .map_err(|e| error!(e))?;
+    let owner_outstanding = accounts
+        .rent_pool
+        .owner_entitlement_total
+        .checked_sub(accounts.rent_pool.owner_claimed_total)
+        .ok_or_else(|| error!(Error::InvalidRentAccountingState))?;
     let rent_backing = accounts
         .rent_pool
         .reserved_unclaimed
-        .checked_add(distributable)
+        .checked_add(owner_outstanding)
+        .and_then(|sum| sum.checked_add(distributable))
         .ok_or_else(|| error!(Error::ArithmeticOverflow))?;
     require!(
         accounts.rent_vault.amount >= rent_backing,
         Error::InsufficientRentVaultBalance
     );
 
-    let mut entitlements = [0u64; MAX_HOLDERS];
-    let mut total_entitlement = 0u64;
-    for index in 0..count {
-        entitlements[index] =
-            rent_logic::holder_entitlement(distributable, balances[index], eligible_supply)
-                .map_err(|e| error!(e))?;
-        total_entitlement = total_entitlement
-            .checked_add(entitlements[index])
-            .ok_or_else(|| error!(Error::ArithmeticOverflow))?;
-    }
-    require!(
-        total_entitlement <= distributable,
-        Error::InvalidRentAccountingState
-    );
+    let entitlements =
+        rent_logic::holder_entitlements(investor_amount, &balances, count, eligible_supply)
+            .map_err(|e| error!(e))?;
+    let total_entitlement = investor_amount;
     let next_reserved = accounts
         .rent_pool
         .reserved_unclaimed
         .checked_add(total_entitlement)
         .ok_or_else(|| error!(Error::ArithmeticOverflow))?;
-    let next_carry = distributable
-        .checked_sub(total_entitlement)
+    let next_owner_total = accounts
+        .rent_pool
+        .owner_entitlement_total
+        .checked_add(owner_amount)
         .ok_or_else(|| error!(Error::ArithmeticOverflow))?;
     let next_id = accounts
         .rent_pool
@@ -183,6 +183,7 @@ pub fn handle_finalize_rent_period(ctx: Context<FinalizeRentPeriod>) -> Result<(
     period.start_ts = accounts.rent_pool.period_start_ts;
     period.cutoff_ts = accounts.rent_pool.cutoff_ts;
     period.distributable_rent = distributable;
+    period.owner_entitlement = owner_amount;
     period.eligible_supply = eligible_supply;
     period.total_entitlement = total_entitlement;
     period.claimed_amount = 0;
@@ -198,6 +199,6 @@ pub fn handle_finalize_rent_period(ctx: Context<FinalizeRentPeriod>) -> Result<(
     pool.cutoff_ts = next_cutoff;
     pool.current_deposits = 0;
     pool.reserved_unclaimed = next_reserved;
-    pool.carry = next_carry;
+    pool.owner_entitlement_total = next_owner_total;
     Ok(())
 }

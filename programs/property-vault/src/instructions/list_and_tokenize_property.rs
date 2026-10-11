@@ -106,6 +106,7 @@ pub fn handle_list(
     max_supply: u64,
     terms_hash: [u8; 32],
     duration_seconds: u64,
+    investor_allocation_bps: u16,
 ) -> Result<()> {
     require!(
         tenant != Pubkey::default(),
@@ -113,6 +114,10 @@ pub fn handle_list(
     );
     require!(token_price > 0, PropertyVaultError::InvalidTokenPrice);
     require!(max_supply > 0, PropertyVaultError::InvalidMaxSupply);
+    require!(
+        (1..10_000).contains(&investor_allocation_bps),
+        PropertyVaultError::InvalidInvestorAllocation
+    );
     let start_ts = Clock::get()?.unix_timestamp;
     let cutoff_ts =
         rent_logic::checked_cutoff(start_ts, duration_seconds).map_err(|e| error!(e))?;
@@ -252,6 +257,7 @@ pub fn handle_list(
     property.mock_usdc_mint = accounts.mock_usdc_mint.key();
     property.token_price = token_price;
     property.max_supply = max_supply;
+    property.investor_allocation_bps = investor_allocation_bps;
     property.terms_hash = terms_hash;
     property.inventory_authority_bump = ctx.bumps.inventory_authority;
     property.freeze_authority_bump = ctx.bumps.freeze_authority;
@@ -273,7 +279,8 @@ pub fn handle_list(
     rent_pool.duration_seconds = duration_seconds;
     rent_pool.current_deposits = 0;
     rent_pool.reserved_unclaimed = 0;
-    rent_pool.carry = 0;
+    rent_pool.owner_entitlement_total = 0;
+    rent_pool.owner_claimed_total = 0;
     rent_pool.bump = ctx.bumps.rent_pool;
 
     let registry = &mut accounts.holder_registry;

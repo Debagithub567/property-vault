@@ -112,7 +112,14 @@ pub fn handle_claim_rent(ctx: Context<ClaimRent>, period_id: u64) -> Result<()> 
         .rent_pool
         .reserved_unclaimed
         .checked_add(accounts.rent_pool.current_deposits)
-        .and_then(|sum| sum.checked_add(accounts.rent_pool.carry))
+        .and_then(|sum| {
+            sum.checked_add(
+                accounts
+                    .rent_pool
+                    .owner_entitlement_total
+                    .checked_sub(accounts.rent_pool.owner_claimed_total)?,
+            )
+        })
         .ok_or_else(|| error!(Error::ArithmeticOverflow))?;
     require!(
         accounts.rent_vault.amount >= required_backing,

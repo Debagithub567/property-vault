@@ -129,6 +129,7 @@ fn list_instruction(
             max_supply: supply,
             terms_hash: [7; 32],
             duration_seconds: duration,
+            investor_allocation_bps: 8_000,
         }
         .data(),
     };
@@ -292,6 +293,7 @@ fn invest_instruction(
         data: instruction::Invest {
             amount,
             accepted_terms_hash,
+            accepted_investor_allocation_bps: 8_000,
         }
         .data(),
     }
@@ -471,6 +473,27 @@ fn claim_instruction(
         }
         .to_account_metas(None),
         data: instruction::ClaimRent { period_id }.data(),
+    }
+}
+
+fn owner_claim_instruction(owner: Pubkey, keys: &ListingKeys, mock_mint: Pubkey) -> Instruction {
+    Instruction {
+        program_id: VAULT_ID,
+        accounts: accounts::ClaimOwnerRent {
+            owner,
+            property: keys.property,
+            rent_pool: keys.rent_pool,
+            mock_usdc_mint: mock_mint,
+            rent_vault: keys.rent_vault,
+            owner_usdc: get_associated_token_address_with_program_id(
+                &owner,
+                &mock_mint,
+                &token::ID,
+            ),
+            legacy_token_program: token::ID,
+        }
+        .to_account_metas(None),
+        data: instruction::ClaimOwnerRent {}.data(),
     }
 }
 
@@ -768,6 +791,7 @@ async fn listing_initializes_fixed_supply_and_hook_metadata() {
     assert_eq!(property.mint, keys.mint);
     assert_eq!(property.inventory_vault, keys.inventory_vault);
     assert_eq!(property.max_supply, 100);
+    assert_eq!(property.investor_allocation_bps, 8_000);
     assert_eq!(property.mock_usdc_mint, mock_mint.pubkey());
 
     let mint_account = account(&mut context, keys.mint).await;
@@ -862,6 +886,28 @@ async fn listing_initializes_fixed_supply_and_hook_metadata() {
         assert!(context
             .banks_client
             .get_account(invalid_keys.property)
+            .await
+            .unwrap()
+            .is_none());
+    }
+    for (id, allocation) in [(24, 0), (25, 10_000), (26, u16::MAX)] {
+        let (mut invalid, keys) =
+            list_instruction(payer, config, mock_mint.pubkey(), id, tenant, 1, 100, 3600);
+        invalid.data = instruction::ListAndTokenizeProperty {
+            property_id: id,
+            tenant,
+            token_price: 1,
+            max_supply: 100,
+            terms_hash: [7; 32],
+            duration_seconds: 3600,
+            investor_allocation_bps: allocation,
+        }
+        .data();
+        let error = send(&mut context, vec![invalid], &[]).await.unwrap_err();
+        assert!(error.contains("InvalidInvestorAllocation"), "{error}");
+        assert!(context
+            .banks_client
+            .get_account(keys.property)
             .await
             .unwrap()
             .is_none());
@@ -2537,15 +2583,16 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     let period0: RentPeriod = decode(&account(&mut context, period0_key).await.data);
     assert_eq!(period0.holder_count, 10);
     assert_eq!(period0.balances[0..2], [4, 6]);
-    assert_eq!(period0.entitlements[0..2], [80_000_000, 120_000_000]);
+    assert_eq!(period0.entitlements[0..2], [64_000_000, 96_000_000]);
+    assert_eq!(period0.owner_entitlement, 40_000_000);
     assert!(period0.entitlements[2..].iter().all(|amount| *amount == 0));
     assert_eq!(period0.eligible_supply, 10);
-    assert_eq!(period0.total_entitlement, 200_000_000);
+    assert_eq!(period0.total_entitlement, 160_000_000);
     let pool: RentPool = decode(&account(&mut context, keys.rent_pool).await.data);
     assert_eq!(pool.period_id, 1);
     assert_eq!(pool.current_deposits, 0);
-    assert_eq!(pool.reserved_unclaimed, 200_000_000);
-    assert_eq!(pool.carry, 0);
+    assert_eq!(pool.reserved_unclaimed, 160_000_000);
+    assert_eq!(pool.owner_entitlement_total, 40_000_000);
     assert_eq!(pool.period_start_ts, period0.cutoff_ts);
     assert_eq!(pool.cutoff_ts - pool.period_start_ts, 3600);
     let duplicate_finalize = send(&mut context, vec![finalize], &[]).await.unwrap_err();
@@ -2627,11 +2674,11 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
         .unwrap();
     assert_eq!(
         usdc_balance(&mut context, alice_usdc).await,
-        alice_usdc_before + 80_000_000
+        alice_usdc_before + 64_000_000
     );
     assert_eq!(
         usdc_balance(&mut context, keys.rent_vault).await,
-        120_000_000
+        136_000_000
     );
     let repeat_claim = send(
         &mut context,
@@ -2686,7 +2733,7 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     .unwrap();
     assert_eq!(
         usdc_balance(&mut context, keys.rent_vault).await,
-        170_000_000
+        186_000_000
     );
     let duplicate_old_claim = send(
         &mut context,
@@ -2704,7 +2751,7 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     );
     assert_eq!(
         usdc_balance(&mut context, keys.rent_vault).await,
-        170_000_000
+        186_000_000
     );
     set_clock_to_cutoff(&mut context, keys.rent_pool).await;
     let finalize1 = finalize_instruction(owner, &keys, mock_mint.pubkey(), 1, &holders);
@@ -2729,9 +2776,11 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     .0;
     let period1: RentPeriod = decode(&account(&mut context, period1_key).await.data);
     assert_eq!(period1.balances[0..2], [3, 7]);
-    assert_eq!(period1.entitlements[0..2], [15_000_000, 35_000_000]);
+    assert_eq!(period1.entitlements[0..2], [12_000_000, 28_000_000]);
+    assert_eq!(period1.owner_entitlement, 10_000_000);
     let pool: RentPool = decode(&account(&mut context, keys.rent_pool).await.data);
-    assert_eq!(pool.reserved_unclaimed, 170_000_000);
+    assert_eq!(pool.reserved_unclaimed, 136_000_000);
+    assert_eq!(pool.owner_entitlement_total, 50_000_000);
 
     send(
         &mut context,
@@ -2800,14 +2849,14 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     .unwrap();
     assert_eq!(
         usdc_balance(&mut context, bob_usdc).await,
-        bob_before + 155_000_000
+        bob_before + 124_000_000
     );
     assert_eq!(
         usdc_balance(&mut context, keys.rent_vault).await,
-        15_000_000
+        62_000_000
     );
     let pool: RentPool = decode(&account(&mut context, keys.rent_pool).await.data);
-    assert_eq!(pool.reserved_unclaimed, 15_000_000);
+    assert_eq!(pool.reserved_unclaimed, 12_000_000);
     let zero_holder_claim = send(
         &mut context,
         vec![claim_instruction(
@@ -2868,7 +2917,7 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     );
     assert_eq!(
         usdc_balance(&mut context, keys.rent_vault).await,
-        15_000_000
+        62_000_000
     );
 
     send(
@@ -2929,8 +2978,8 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     assert_eq!(period3.distributable_rent, 1);
     assert_eq!(period3.total_entitlement, 0);
     let pool: RentPool = decode(&account(&mut context, keys.rent_pool).await.data);
-    assert_eq!(pool.carry, 1);
-    assert_eq!(pool.reserved_unclaimed, 15_000_000);
+    assert_eq!(period3.owner_entitlement, 1);
+    assert_eq!(pool.reserved_unclaimed, 12_000_000);
 
     send(
         &mut context,
@@ -2965,13 +3014,14 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     )
     .0;
     let period4: RentPeriod = decode(&account(&mut context, period4_key).await.data);
-    assert_eq!(period4.distributable_rent, 10);
+    assert_eq!(period4.distributable_rent, 9);
     assert_eq!(period4.balances[0..2], [7, 3]);
-    assert_eq!(period4.entitlements[0..2], [7, 3]);
-    assert_eq!(period4.total_entitlement, 10);
+    assert_eq!(period4.entitlements[0..2], [5, 2]);
+    assert_eq!(period4.total_entitlement, 7);
+    assert_eq!(period4.owner_entitlement, 2);
     let pool: RentPool = decode(&account(&mut context, keys.rent_pool).await.data);
-    assert_eq!(pool.reserved_unclaimed, 15_000_010);
-    assert_eq!(pool.carry, 0);
+    assert_eq!(pool.reserved_unclaimed, 12_000_007);
+    assert_eq!(pool.owner_entitlement_total, 50_000_003);
     send(
         &mut context,
         vec![claim_instruction(
@@ -2998,15 +3048,67 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     .unwrap();
     assert_eq!(
         usdc_balance(&mut context, keys.rent_vault).await,
-        15_000_000
+        62_000_003
     );
     assert_eq!(
         decode::<RentPool>(&account(&mut context, keys.rent_pool).await.data).reserved_unclaimed,
-        15_000_000
+        12_000_000
     );
 
-    // A second property remains wholly in inventory. Deposits carry forward
-    // without division by zero or creating a claim for its empty registry.
+    let owner_usdc =
+        get_associated_token_address_with_program_id(&owner, &mock_mint.pubkey(), &token::ID);
+    send(
+        &mut context,
+        vec![
+            spl_associated_token_account::instruction::create_associated_token_account(
+                &owner,
+                &owner,
+                &mock_mint.pubkey(),
+                &token::ID,
+            ),
+        ],
+        &[],
+    )
+    .await
+    .unwrap();
+    let owner_claim = owner_claim_instruction(owner, &keys, mock_mint.pubkey());
+    let mut attacker_claim = owner_claim.clone();
+    attacker_claim.accounts[0].pubkey = alice.pubkey();
+    let error = send(&mut context, vec![attacker_claim], &[&alice])
+        .await
+        .unwrap_err();
+    assert!(error.contains("Unauthorized"), "{error}");
+    let owner_before = usdc_balance(&mut context, owner_usdc).await;
+    let investment_before_owner_claim = usdc_balance(&mut context, keys.investment_vault).await;
+    send(&mut context, vec![owner_claim.clone()], &[])
+        .await
+        .unwrap();
+    assert_eq!(
+        usdc_balance(&mut context, owner_usdc).await,
+        owner_before + 50_000_003
+    );
+    assert_eq!(
+        usdc_balance(&mut context, keys.rent_vault).await,
+        12_000_000
+    );
+    assert_eq!(
+        usdc_balance(&mut context, keys.investment_vault).await,
+        investment_before_owner_claim
+    );
+    let repeat_owner_claim = send(&mut context, vec![owner_claim], &[])
+        .await
+        .unwrap_err();
+    assert!(
+        repeat_owner_claim.contains("NoOwnerRentEntitlement"),
+        "{repeat_owner_claim}"
+    );
+    assert_eq!(
+        usdc_balance(&mut context, keys.rent_vault).await,
+        12_000_000
+    );
+
+    // A second property remains wholly in inventory. Its rent belongs only to
+    // the owner; no later investor can claim this period.
     let (empty_list, empty_keys) = list_instruction(
         owner,
         config,
@@ -3073,9 +3175,60 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
     assert_eq!(empty_period.holder_count, 0);
     assert_eq!(empty_period.total_entitlement, 0);
     let empty_pool: RentPool = decode(&account(&mut context, empty_keys.rent_pool).await.data);
-    assert_eq!(empty_pool.carry, 7);
+    assert_eq!(empty_period.owner_entitlement, 7);
+    assert_eq!(empty_pool.owner_entitlement_total, 7);
     assert_eq!(empty_pool.reserved_unclaimed, 0);
     assert_eq!(usdc_balance(&mut context, empty_keys.rent_vault).await, 7);
+    send(
+        &mut context,
+        vec![owner_claim_instruction(
+            owner,
+            &empty_keys,
+            mock_mint.pubkey(),
+        )],
+        &[],
+    )
+    .await
+    .unwrap();
+    assert_eq!(usdc_balance(&mut context, empty_keys.rent_vault).await, 0);
+    send(
+        &mut context,
+        vec![register_instruction(
+            alice.pubkey(),
+            &empty_keys,
+            None,
+            None,
+        )],
+        &[&alice],
+    )
+    .await
+    .unwrap();
+    send(
+        &mut context,
+        with_transfer_budget(invest_instruction(
+            alice.pubkey(),
+            &empty_keys,
+            mock_mint.pubkey(),
+            100_000_000,
+            [7; 32],
+        )),
+        &[&alice],
+    )
+    .await
+    .unwrap();
+    let old_claim = send(
+        &mut context,
+        vec![claim_instruction(
+            alice.pubkey(),
+            &empty_keys,
+            mock_mint.pubkey(),
+            0,
+        )],
+        &[&alice],
+    )
+    .await
+    .unwrap_err();
+    assert!(old_claim.contains("NoRentEntitlement"), "{old_claim}");
 
     // Both properties are valid; substituting their valid accounts must still
     // fail each property's PDA and account-relationship checks.
@@ -3134,4 +3287,136 @@ async fn phase6_cutoff_snapshots_and_historical_claims_use_real_sbf_balances() {
         usdc_balance(&mut context, keys.rent_vault).await,
         rent_before
     );
+
+    // All 1,000 tokens sold: a 10,000 USDC deposit gives 8 USDC per token.
+    let (full_list, full_keys) = list_instruction(
+        owner,
+        config,
+        mock_mint.pubkey(),
+        63,
+        tenant.pubkey(),
+        1,
+        1_000,
+        3600,
+    );
+    send(
+        &mut context,
+        vec![full_list, hook_initialize_instruction(owner, &full_keys)],
+        &[],
+    )
+    .await
+    .unwrap();
+    for holder in [&alice, &bob] {
+        send(
+            &mut context,
+            vec![register_instruction(
+                holder.pubkey(),
+                &full_keys,
+                None,
+                None,
+            )],
+            &[holder],
+        )
+        .await
+        .unwrap();
+    }
+    let mut stale_allocation =
+        invest_instruction(alice.pubkey(), &full_keys, mock_mint.pubkey(), 400, [7; 32]);
+    stale_allocation.data = instruction::Invest {
+        amount: 400,
+        accepted_terms_hash: [7; 32],
+        accepted_investor_allocation_bps: 7_000,
+    }
+    .data();
+    let error = send(&mut context, vec![stale_allocation], &[&alice])
+        .await
+        .unwrap_err();
+    assert!(error.contains("StaleInvestorAllocation"), "{error}");
+    for (holder, amount) in [(&alice, 400), (&bob, 600)] {
+        send(
+            &mut context,
+            with_transfer_budget(invest_instruction(
+                holder.pubkey(),
+                &full_keys,
+                mock_mint.pubkey(),
+                amount,
+                [7; 32],
+            )),
+            &[holder],
+        )
+        .await
+        .unwrap();
+    }
+    assert_eq!(
+        property_balance(&mut context, full_keys.inventory_vault)
+            .await
+            .0,
+        0
+    );
+    let tenant_usdc = get_associated_token_address_with_program_id(
+        &tenant.pubkey(),
+        &mock_mint.pubkey(),
+        &token::ID,
+    );
+    send(
+        &mut context,
+        vec![spl_token::instruction::mint_to(
+            &token::ID,
+            &mock_mint.pubkey(),
+            &tenant_usdc,
+            &owner,
+            &[],
+            10_000_000_000,
+        )
+        .unwrap()],
+        &[],
+    )
+    .await
+    .unwrap();
+    send(
+        &mut context,
+        vec![pay_rent_instruction(
+            tenant.pubkey(),
+            &full_keys,
+            mock_mint.pubkey(),
+            10_000_000_000,
+        )],
+        &[&tenant],
+    )
+    .await
+    .unwrap();
+    set_clock_to_cutoff(&mut context, full_keys.rent_pool).await;
+    send(
+        &mut context,
+        vec![
+            ComputeBudgetInstruction::set_compute_unit_limit(1_000_000),
+            finalize_instruction(
+                owner,
+                &full_keys,
+                mock_mint.pubkey(),
+                0,
+                &[alice.pubkey(), bob.pubkey()],
+            ),
+        ],
+        &[],
+    )
+    .await
+    .unwrap();
+    let full_period_key = Pubkey::find_program_address(
+        &[
+            RENT_PERIOD_SEED,
+            full_keys.property.as_ref(),
+            &0u64.to_le_bytes(),
+        ],
+        &VAULT_ID,
+    )
+    .0;
+    let full_period: RentPeriod = decode(&account(&mut context, full_period_key).await.data);
+    assert_eq!(full_period.eligible_supply, 1_000);
+    assert_eq!(
+        full_period.entitlements[0..2],
+        [3_200_000_000, 4_800_000_000]
+    );
+    assert_eq!(full_period.owner_entitlement, 2_000_000_000);
+    assert_eq!(full_period.total_entitlement, 8_000_000_000);
 }

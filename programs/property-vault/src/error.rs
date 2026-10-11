@@ -34,6 +34,10 @@ pub enum PropertyVaultError {
     NotImplemented,
     #[msg("Invalid property supply")]
     InvalidMaxSupply,
+    #[msg("Investor rental allocation must be between 1 and 9,999 basis points")]
+    InvalidInvestorAllocation,
+    #[msg("Accepted investor rental allocation does not match the property")]
+    StaleInvestorAllocation,
     #[msg("Invalid tenant")]
     InvalidTenant,
     #[msg("Invalid rent collection duration")]
@@ -68,6 +72,8 @@ pub enum PropertyVaultError {
     RentAlreadyClaimed,
     #[msg("No rent entitlement exists for this holder")]
     NoRentEntitlement,
+    #[msg("No finalized owner rent is available to claim")]
+    NoOwnerRentEntitlement,
     #[msg("Transfer amount must be positive")]
     InvalidTransferAmount,
     #[msg("Property token balance is insufficient")]

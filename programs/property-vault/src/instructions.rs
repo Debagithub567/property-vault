@@ -1,3 +1,4 @@
+pub mod claim_owner_rent;
 pub mod claim_rent;
 pub mod finalize_rent_period;
 pub mod initialize_config;
@@ -8,6 +9,7 @@ pub mod register_holder;
 pub mod transfer_property_tokens;
 pub mod withdraw_raised_capital;
 
+pub use claim_owner_rent::*;
 pub use claim_rent::*;
 pub use finalize_rent_period::*;
 pub use initialize_config::*;

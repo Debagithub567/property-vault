@@ -121,6 +121,7 @@ pub fn handle_invest(
     ctx: Context<Invest>,
     amount: u64,
     accepted_terms_hash: [u8; 32],
+    accepted_investor_allocation_bps: u16,
 ) -> Result<()> {
     let accounts = ctx.accounts;
     token_transfer::validate_property(
@@ -139,6 +140,11 @@ pub fn handle_invest(
     )?;
     logic::validate_investment_request(amount, &accepted_terms_hash, &accounts.property.terms_hash)
         .map_err(|e| error!(e))?;
+    require_eq!(
+        accepted_investor_allocation_bps,
+        accounts.property.investor_allocation_bps,
+        Error::StaleInvestorAllocation
+    );
     let token_amount = logic::calculate_token_amount(amount, accounts.property.token_price)
         .map_err(|e| error!(e))?;
     logic::validate_inventory(accounts.inventory_vault.amount, token_amount)

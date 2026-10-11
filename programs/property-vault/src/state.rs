@@ -62,6 +62,8 @@ pub struct Property {
     // Mock-USDC base units per zero-decimal property token.
     pub token_price: u64,
     pub max_supply: u64,
+    // Immutable investor share of collected rent, in basis points.
+    pub investor_allocation_bps: u16,
     pub terms_hash: [u8; 32],
     pub inventory_authority_bump: u8,
     pub freeze_authority_bump: u8,
@@ -97,8 +99,11 @@ pub struct RentPool {
     pub cutoff_ts: i64,
     pub duration_seconds: u64,
     pub current_deposits: u64,
+    // Outstanding finalized investor claims across all periods.
     pub reserved_unclaimed: u64,
-    pub carry: u64,
+    // Cumulative finalized owner entitlement and amount already withdrawn.
+    pub owner_entitlement_total: u64,
+    pub owner_claimed_total: u64,
     pub bump: u8,
 }
 
@@ -114,6 +119,7 @@ pub struct RentPeriod {
     pub start_ts: i64,
     pub cutoff_ts: i64,
     pub distributable_rent: u64,
+    pub owner_entitlement: u64,
     pub eligible_supply: u64,
     pub total_entitlement: u64,
     pub claimed_amount: u64,
@@ -149,12 +155,12 @@ mod tests {
     #[test]
     fn account_allocations_match_canonical_fixed_layouts() {
         assert_eq!(Config::SPACE, 73);
-        assert_eq!(Property::SPACE, 227);
+        assert_eq!(Property::SPACE, 229);
         assert_eq!(InvestmentPool::SPACE, 89);
         assert_eq!(InvestorPosition::SPACE, 121);
         assert_eq!(HolderRegistry::SPACE, 394);
-        assert_eq!(RentPool::SPACE, 129);
-        assert_eq!(RentPeriod::SPACE, 578);
+        assert_eq!(RentPool::SPACE, 137);
+        assert_eq!(RentPeriod::SPACE, 586);
         assert_eq!(RentClaim::SPACE, 89);
     }
 }

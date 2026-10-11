@@ -30,6 +30,7 @@ pub mod property_vault {
         max_supply: u64,
         terms_hash: [u8; 32],
         duration_seconds: u64,
+        investor_allocation_bps: u16,
     ) -> Result<()> {
         instructions::list_and_tokenize_property::handle_list(
             ctx,
@@ -39,6 +40,7 @@ pub mod property_vault {
             max_supply,
             terms_hash,
             duration_seconds,
+            investor_allocation_bps,
         )
     }
 
@@ -49,8 +51,18 @@ pub mod property_vault {
         instructions::register_holder::handle_register_holder(ctx, replace_index)
     }
 
-    pub fn invest(ctx: Context<Invest>, amount: u64, accepted_terms_hash: [u8; 32]) -> Result<()> {
-        instructions::invest::handle_invest(ctx, amount, accepted_terms_hash)
+    pub fn invest(
+        ctx: Context<Invest>,
+        amount: u64,
+        accepted_terms_hash: [u8; 32],
+        accepted_investor_allocation_bps: u16,
+    ) -> Result<()> {
+        instructions::invest::handle_invest(
+            ctx,
+            amount,
+            accepted_terms_hash,
+            accepted_investor_allocation_bps,
+        )
     }
 
     pub fn transfer_property_tokens(
@@ -74,5 +86,9 @@ pub mod property_vault {
 
     pub fn claim_rent(ctx: Context<ClaimRent>, period_id: u64) -> Result<()> {
         instructions::claim_rent::handle_claim_rent(ctx, period_id)
+    }
+
+    pub fn claim_owner_rent(ctx: Context<ClaimOwnerRent>) -> Result<()> {
+        instructions::claim_owner_rent::handle_claim_owner_rent(ctx)
     }
 }
