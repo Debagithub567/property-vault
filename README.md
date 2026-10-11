@@ -151,8 +151,10 @@ The Transfer Hook is deployed separately because Solana's Token-2022 Transfer Ho
 This is a simplified conceptual diagram. It does not show every PDA, token account, instruction, or CPI.
 
 ### Detailed Architecture Document
+<img width="2264" height="1274" alt="image" src="https://github.com/user-attachments/assets/7e3602a2-0f71-45c6-b4e9-c5e2a8e2b594" />
 
-The complete architecture is documented separately in a 10-page PDF.
+
+The complete architecture is documented separately in a PDF.
 
 It covers the detailed program structure, account relationships, instruction flows, and implementation decisions.
 
