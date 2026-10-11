@@ -16,9 +16,7 @@ import {
 } from "@solana/web3.js";
 import * as spl from "../frontend/node_modules/@solana/spl-token/lib/cjs/index.js";
 
-// These tests deliberately use saved Devnet IDLs. target/ is ignored by Git,
-// so exact copies are kept as test fixtures for clean-checkout reproduction.
-// Never use target/idl/property_vault.json: it may come from a local build.
+
 function savedIdl(name: string): any {
   const fixture = JSON.parse(readFileSync(join(process.cwd(), "tests/fixtures", name), "utf8"));
   const target = join(process.cwd(), "target/idl", name);
