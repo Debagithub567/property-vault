@@ -6,3 +6,7 @@ node_modules
 test-ledger
 .yarn
 .surfpool
+/docs/ANCHOR_HANDOFF.md
+/frontend/SOURCE_MANIFEST.json
+/frontend/VERIFICATION_REPORT.md
+/frontend/WALLET_STAGE1.md
