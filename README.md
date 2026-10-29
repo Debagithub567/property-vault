@@ -395,7 +395,7 @@ Potential future work includes:
 |---|---|
 | Main Anchor Program | [Solana Devnet Explorer](https://explorer.solana.com/address/DA1iVaPWd7epSAong3cGz8jX7rRJMT42zfrHWo3z5123?cluster=devnet) |
 | Transfer Hook Program | [Solana Devnet Explorer](https://explorer.solana.com/address/3eKZN7MKpkU7gjaYFdR8zV6UCr8u7FeBTKBLe2yeM6J5?cluster=devnet) |
-| Detailed Architecture PDF | [Google Drive — Add Link](PASTE_GOOGLE_DRIVE_ARCHITECTURE_LINK_HERE) |
+| Detailed Architecture PDF | [Google Drive — Add Link](https://drive.google.com/file/d/1r_uU9G1T24XVf7xDkExTvHeEzk_lJV7K/view?usp=sharing) |
 | Devnet Test Evidence | [Test Results](docs/devnet-test-results.md) |
 | Test Screenshot | [14 Passing Tests](docs/images/devnet-tests-passing.png) |
 
